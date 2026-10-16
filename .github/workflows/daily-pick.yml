@@ -1,0 +1,54 @@
+name: Daily pick
+
+on:
+  schedule:
+    # 13:00 UTC on weekdays = 9:00 ET (EDT) / 8:00 ET (EST), before the US open.
+    - cron: "0 13 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      no_llm:
+        description: "Quant-only pick (no Claude API call)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-pick
+  cancel-in-progress: false
+
+jobs:
+  pick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e .
+
+      - name: Research and publish today's pick
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ "${{ inputs.no_llm }}" = "true" ] || [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::warning::Running in quant-only mode (no ANTHROPIC_API_KEY secret or no_llm set)."
+            pickwise -v run --no-llm
+          else
+            pickwise -v run
+          fi
+
+      - name: Commit the pick
+        run: |
+          git config user.name "pickwise-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add picks README.md
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "📈 Daily pick $(date -u +%F)"
+            git push
+          fi
