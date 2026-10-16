@@ -18,7 +18,11 @@
 ## Today's pick
 
 <!-- today:start -->
-_The first pick will appear here after the next scheduled run._
+### 2026-10-16: [MSFT](picks/2026-10-16.md) · Microsoft Corporation
+
+> Microsoft: a quality compounder at a fair multiple heading into Oct 28 earnings, while the energy-heavy screen looks stretched
+
+Conviction: 🟠 Medium · Horizon: 1-3 months (through FQ1 FY27 earnings on Oct 28, 2026 and the following weeks) · [Full write-up →](picks/2026-10-16.md)
 <!-- today:end -->
 
 ## Track record
@@ -26,7 +30,11 @@ _The first pick will appear here after the next scheduled run._
 Every pick is logged with its entry price and scored against the S&P 500 (SPY) over the same window. Nothing gets deleted, so the misses stay on the record too.
 
 <!-- track-record:start -->
-_Track record starts after the first pick._
+_Stats start once the first pick has a full trading day behind it._
+
+| Date | Ticker | Conviction | Entry | Now | Return | vs S&P 500 |
+|---|---|---|---|---|---|---|
+| 2026-10-16 | [MSFT](picks/2026-10-16.md) | medium | $526.26 | $526.26 | +0.00% | +0.00% |
 <!-- track-record:end -->
 
 Full history: [`picks/`](picks/)

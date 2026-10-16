@@ -1,0 +1,11 @@
+[
+  {
+    "date": "2026-10-16",
+    "ticker": "MSFT",
+    "company": "Microsoft Corporation",
+    "conviction": "medium",
+    "entry_price": 526.26,
+    "benchmark_entry_price": 762.5,
+    "model": "claude-opus-5-5"
+  }
+]
