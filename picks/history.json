@@ -7,5 +7,14 @@
     "entry_price": 526.26,
     "benchmark_entry_price": 762.5,
     "model": "claude-opus-5-5"
+  },
+  {
+    "date": "2026-10-19",
+    "ticker": "EOG",
+    "company": "EOG Resources, Inc.",
+    "conviction": "low",
+    "entry_price": 157.82,
+    "benchmark_entry_price": 767.49,
+    "model": "claude-opus-5-5"
   }
 ]

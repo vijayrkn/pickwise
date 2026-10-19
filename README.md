@@ -18,11 +18,11 @@
 ## Today's pick
 
 <!-- today:start -->
-### 2026-10-16: [MSFT](picks/2026-10-16.md) · Microsoft Corporation
+### 2026-10-19: [EOG](picks/2026-10-19.md) · EOG Resources, Inc.
 
-> Microsoft: a quality compounder at a fair multiple heading into Oct 28 earnings, while the energy-heavy screen looks stretched
+> EOG: the cleanest balance sheet in the oil rally, at about 10x forward earnings with WTI near $100
 
-Conviction: 🟠 Medium · Horizon: 1-3 months (through FQ1 FY27 earnings on Oct 28, 2026 and the following weeks) · [Full write-up →](picks/2026-10-16.md)
+Conviction: 🟡 Low · Horizon: 1-3 months · [Full write-up →](picks/2026-10-19.md)
 <!-- today:end -->
 
 ## Track record
@@ -30,11 +30,12 @@ Conviction: 🟠 Medium · Horizon: 1-3 months (through FQ1 FY27 earnings on Oct
 Every pick is logged with its entry price and scored against the S&P 500 (SPY) over the same window. Nothing gets deleted, so the misses stay on the record too.
 
 <!-- track-record:start -->
-_Stats start once the first pick has a full trading day behind it._
+**1 pick** · Hit rate **100%** · Beat S&P 500 **100%** · Avg return **+1.55%** · Avg alpha **+0.89%**
 
 | Date | Ticker | Conviction | Entry | Now | Return | vs S&P 500 |
 |---|---|---|---|---|---|---|
-| 2026-10-16 | [MSFT](picks/2026-10-16.md) | medium | $526.26 | $526.26 | +0.00% | +0.00% |
+| 2026-10-19 | [EOG](picks/2026-10-19.md) | low | $157.82 | $157.82 | +0.00% | +0.00% |
+| 2026-10-16 | [MSFT](picks/2026-10-16.md) | medium | $526.26 | $534.40 | +1.55% | +0.89% |
 <!-- track-record:end -->
 
 Full history: [`picks/`](picks/)
