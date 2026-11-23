@@ -2,10 +2,10 @@
 
 # 📈 Pickwise
 
-**An autonomous AI research agent that publishes one well-reasoned stock idea every trading day and keeps score of itself.**
+**An autonomous AI research agent that publishes one well-reasoned stock idea twice a week and keeps score of itself.**
 
 [![CI](https://github.com/vijayrkn/pickwise/actions/workflows/ci.yml/badge.svg)](https://github.com/vijayrkn/pickwise/actions/workflows/ci.yml)
-[![Daily pick](https://github.com/vijayrkn/pickwise/actions/workflows/daily-pick.yml/badge.svg)](https://github.com/vijayrkn/pickwise/actions/workflows/daily-pick.yml)
+[![Scheduled pick](https://github.com/vijayrkn/pickwise/actions/workflows/daily-pick.yml/badge.svg)](https://github.com/vijayrkn/pickwise/actions/workflows/daily-pick.yml)
 ![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white)
 ![Claude](https://img.shields.io/badge/Claude-Haiku%205.5-D97757)
 ![License](https://img.shields.io/badge/license-MIT-green)
@@ -57,7 +57,7 @@ flowchart LR
     E -- get_fundamentals --> G[(Fundamentals)]
     E -- web_search --> H[(News & catalysts)]
     E -- get_pick_history --> I[(Past picks)]
-    E -- submit_pick --> J[Daily write-up<br/>+ README update]
+    E -- submit_pick --> J[Write-up<br/>+ README update]
     J --> K[Performance tracker<br/>vs S&P 500]
     K -.feedback.-> E
 ```
@@ -65,7 +65,7 @@ flowchart LR
 1. **Screen (code).** Pulls a year of prices for the universe in one batch call and computes 12-1 month momentum, 3-month return, trend (50/200-day averages), volatility, distance from the 52-week high, and RSI. The top 25 then get a quality score from fundamentals and are re-ranked to a 10-name shortlist. Anything picked in the last 30 days is excluded.
 2. **Research (agent).** Claude Haiku 5.5 gets the shortlist and a toolset. It decides which names deserve a closer look, pulls price action and fundamentals, searches the web for recent earnings and catalysts, and checks its own track record before committing.
 3. **Decide (structured output).** The agent must call `submit_pick` with a strict JSON schema (thesis, catalysts, risks, conviction, and why it beat the runner-up). Off-shortlist tickers are rejected, and the agent is told to try again.
-4. **Publish and track (code).** A GitHub Action runs every weekday before the US open. It writes `picks/YYYY-MM-DD.md`, appends to `picks/history.json`, refreshes this README, and commits.
+4. **Publish and track (code).** A GitHub Action runs every Monday and Thursday before the US open. It writes `picks/YYYY-MM-DD.md`, appends to `picks/history.json`, refreshes this README, and commits.
 
 ### Design choices
 
@@ -75,7 +75,7 @@ flowchart LR
 | Strict tool schemas plus a terminal `submit_pick` tool | Output is guaranteed to parse. Validation errors go back to the model as `is_error` tool results so it can self-correct. |
 | Server-side web search | Fresh news without running a scraper. Results come with citations, which end up in `sources`. |
 | The agent sees its own track record | Discourages repetition and overconfidence. "Low conviction" is an allowed answer. |
-| Claude Haiku 5.5 at `low` effort by default | A daily run costs a fraction of a cent. The quant screen already does the heavy lifting, so the model only has to weigh 2-3 finalists. Use `--model claude-opus-5-5 --effort high` for deeper research. |
+| Claude Haiku 5.5 at `low` effort by default | A run costs about 2-3 cents, mostly for the two web searches. The quant screen already does the heavy lifting, so the model only has to weigh 2-3 finalists. Use `--model claude-opus-5-5 --effort high` for deeper research. |
 | Prompt caching and a tight research budget | Every turn resends the conversation, so the repeated prefix is cached (billed at 10% of the input rate). The agent is capped at 8 turns and 3 web searches. |
 | Refusal fallback on larger models | With Opus or Sonnet, `fallbacks: "default"` retries a declined request on a fallback model inside the same call. Haiku doesn't offer this, so a refusal ends the run with a clear error. |
 | `--no-llm` quant-only mode | The pipeline still runs (and CI can exercise it) without an API key. |
@@ -101,7 +101,7 @@ pickwise track                  # performance of every past pick
 1. Fork the repo.
 2. Make sure web search is enabled for your organization in the [Claude Console](https://console.anthropic.com) settings. Without it the agent still runs, but on price and fundamentals only.
 3. Add an `ANTHROPIC_API_KEY` secret under **Settings → Secrets and variables → Actions**.
-4. Enable workflows on the **Actions** tab. The `Daily pick` workflow runs at 13:00 UTC on weekdays, and you can also trigger it by hand.
+4. Enable workflows on the **Actions** tab. The `Scheduled pick` workflow runs at 13:00 UTC on Mondays and Thursdays, and you can also trigger it by hand.
 
 Without the secret, the workflow falls back to quant-only picks.
 
@@ -131,7 +131,7 @@ The suite runs fully offline. Price series are synthetic with known shapes (stea
 ## Roadmap
 
 - [ ] Sector-neutral mode (one pick per sector per week)
-- [ ] Email and Slack delivery of the daily write-up
+- [ ] Email and Slack delivery of each write-up
 - [ ] Rolling equity curve chart in the README
 - [ ] Earnings-calendar awareness to avoid picking the day before a report
 

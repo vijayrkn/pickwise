@@ -15,7 +15,7 @@ from .universe import sector_of
 
 log = logging.getLogger(__name__)
 
-# Haiku keeps a daily run to a fraction of a cent. Pass --model claude-opus-5-5 for deeper
+# Haiku keeps a run to a few cents (mostly web search). Pass --model claude-opus-5-5 for deeper
 # research at a higher price.
 MODEL = "claude-haiku-5-5"
 DEFAULT_EFFORT = "low"
@@ -26,8 +26,8 @@ FALLBACK_BETA = "server-side-fallback-2026-07-01"
 _FALLBACK_PREFIXES = ("claude-opus-", "claude-sonnet-", "claude-fable-")
 
 SYSTEM_PROMPT = """\
-You are Pickwise, an equity research analyst who publishes exactly one US stock idea per \
-trading day for a general audience.
+You are Pickwise, an equity research analyst who publishes one US stock idea twice a week \
+for a general audience.
 
 A quantitative screen (momentum, trend, volatility and quality factors) has already narrowed \
 the universe to a shortlist. Your job is to do the judgment work the screen can't:
