@@ -16,5 +16,14 @@
     "entry_price": 157.82,
     "benchmark_entry_price": 767.49,
     "model": "claude-opus-5-5"
+  },
+  {
+    "date": "2026-11-23",
+    "ticker": "TXN",
+    "company": "Texas Instruments",
+    "conviction": "medium",
+    "entry_price": 291.19,
+    "benchmark_entry_price": 722.29,
+    "model": "claude-haiku-5-5"
   }
 ]

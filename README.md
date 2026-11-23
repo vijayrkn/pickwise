@@ -18,11 +18,11 @@
 ## Today's pick
 
 <!-- today:start -->
-### 2026-10-19: [EOG](picks/2026-10-19.md) · EOG Resources, Inc.
+### 2026-11-23: [TXN](picks/2026-11-23.md) · Texas Instruments
 
-> EOG: the cleanest balance sheet in the oil rally, at about 10x forward earnings with WTI near $100
+> TXN: Analog chip leader with strong momentum, fresh Cantor upgrade, but priced for execution
 
-Conviction: 🟡 Low · Horizon: 1-3 months · [Full write-up →](picks/2026-10-19.md)
+Conviction: 🟠 Medium · Horizon: 1-3 months · [Full write-up →](picks/2026-11-23.md)
 <!-- today:end -->
 
 ## Track record
@@ -30,12 +30,13 @@ Conviction: 🟡 Low · Horizon: 1-3 months · [Full write-up →](picks/2026-10
 Every pick is logged with its entry price and scored against the S&P 500 (SPY) over the same window. Nothing gets deleted, so the misses stay on the record too.
 
 <!-- track-record:start -->
-**1 pick** · Hit rate **100%** · Beat S&P 500 **100%** · Avg return **+1.55%** · Avg alpha **+0.89%**
+**2 picks** · Hit rate **0%** · Beat S&P 500 **0%** · Avg return **-7.16%** · Avg alpha **-1.58%**
 
 | Date | Ticker | Conviction | Entry | Now | Return | vs S&P 500 |
 |---|---|---|---|---|---|---|
-| 2026-10-19 | [EOG](picks/2026-10-19.md) | low | $157.82 | $157.82 | +0.00% | +0.00% |
-| 2026-10-16 | [MSFT](picks/2026-10-16.md) | medium | $526.26 | $534.40 | +1.55% | +0.89% |
+| 2026-11-23 | [TXN](picks/2026-11-23.md) | medium | $291.19 | $291.19 | +0.00% | +0.00% |
+| 2026-10-19 | [EOG](picks/2026-10-19.md) | low | $157.82 | $145.34 | -7.91% | -2.02% |
+| 2026-10-16 | [MSFT](picks/2026-10-16.md) | medium | $526.26 | $492.50 | -6.42% | -1.14% |
 <!-- track-record:end -->
 
 Full history: [`picks/`](picks/)
