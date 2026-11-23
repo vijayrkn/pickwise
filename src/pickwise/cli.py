@@ -4,12 +4,15 @@ from __future__ import annotations
 
 import argparse
 import logging
+import os
 import sys
 from datetime import date
 from pathlib import Path
 
+import anthropic
+
 from . import market_data, report, screener, tracker
-from .agent import MODEL, quant_only_pick, run_agent
+from .agent import DEFAULT_EFFORT, MODEL, quant_only_pick, run_agent
 from .models import PickRecord
 from .tools import Toolbox
 from .universe import BENCHMARK, all_tickers
@@ -41,20 +44,29 @@ def cmd_screen(args) -> int:
 
 
 def cmd_run(args) -> int:
+    if not args.no_llm and not os.environ.get("ANTHROPIC_API_KEY"):
+        log.error("ANTHROPIC_API_KEY is not set in this shell. Export it first, or use "
+                  "--no-llm for a quant-only pick.")
+        return 1
     as_of = date.today()
     as_of_str = as_of.isoformat()
     history, closes, candidates = _load_market(as_of)
     log.info("Shortlist: %s", ", ".join(candidates.index))
 
     toolbox = Toolbox(closes, candidates, history, market_data.fundamentals)
-    result = quant_only_pick(toolbox) if args.no_llm else run_agent(
-        toolbox, as_of_str, model=args.model, effort=args.effort
-    )
+    try:
+        result = quant_only_pick(toolbox) if args.no_llm else run_agent(
+            toolbox, as_of_str, model=args.model, effort=args.effort
+        )
+    except anthropic.AuthenticationError:
+        log.error("ANTHROPIC_API_KEY was rejected. Create a new key in the Claude Console and "
+                  "update it (locally, or the repository secret for the GitHub workflow).")
+        return 1
     pick = result.pick
     price = float(closes[pick.ticker].dropna().iloc[-1])
-    log.info("Pick: %s (%s conviction) via %s in %d turns, %d in / %d out tokens",
+    log.info("Pick: %s (%s conviction) via %s in %d turns, %d in (%d cached) / %d out tokens",
              pick.ticker, pick.conviction, result.model, result.turns,
-             result.input_tokens, result.output_tokens)
+             result.input_tokens, result.cached_input_tokens, result.output_tokens)
 
     markdown = report.render_pick(pick, as_of_str, price, candidates, result.model)
     if args.dry_run:
@@ -107,7 +119,9 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument("--dry-run", action="store_true", help="Print the pick; write nothing.")
     run.add_argument("--no-llm", action="store_true", help="Quant-only pick, no API calls.")
     run.add_argument("--model", default=MODEL)
-    run.add_argument("--effort", default="high", choices=["low", "medium", "high", "xhigh", "max"])
+    run.add_argument(
+        "--effort", default=DEFAULT_EFFORT, choices=["low", "medium", "high", "xhigh", "max"]
+    )
     run.set_defaults(func=cmd_run)
 
     sub.add_parser("screen", help="Print today's quantitative shortlist.").set_defaults(

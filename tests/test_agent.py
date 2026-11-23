@@ -14,7 +14,8 @@ def tool_use(id_, name, args):
 
 def response(content, stop_reason="tool_use"):
     return NS(content=content, stop_reason=stop_reason, stop_details=None, model="fake-model",
-              usage=NS(input_tokens=100, output_tokens=20))
+              usage=NS(input_tokens=100, output_tokens=20,
+                       cache_read_input_tokens=0, cache_creation_input_tokens=0))
 
 
 class FakeClient:
@@ -51,8 +52,21 @@ def test_agent_researches_then_submits(toolbox):
     results = client.calls[1]["messages"][-1]["content"]
     assert [r["tool_use_id"] for r in results] == ["1", "2"]
     assert json.loads(results[0]["content"])["ticker"] == top
-    # Refusal fallback is opted into on every request.
-    assert client.calls[0]["fallbacks"] == "default"
+    # Haiku: basic web search, caching on, and no fallback (Haiku doesn't offer one).
+    request = client.calls[0]
+    assert request["model"] == "claude-haiku-5-5"
+    assert request["cache_control"] == {"type": "ephemeral"}
+    assert "fallbacks" not in request
+    assert request["tools"][-1]["type"] == "web_search_20250305"
+
+
+def test_larger_models_get_fallback_and_dynamic_search(toolbox):
+    top, second = toolbox.candidates.index[:2]
+    client = FakeClient([response([tool_use("1", "submit_pick", submit_args(top, second))])])
+    run_agent(toolbox, "2026-10-16", client=client, model="claude-opus-5-5")
+    request = client.calls[0]
+    assert request["fallbacks"] == "default"
+    assert request["tools"][-1]["type"] == "web_search_20260209"
 
 
 def test_off_shortlist_pick_is_rejected_and_retried(toolbox):

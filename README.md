@@ -7,7 +7,7 @@
 [![CI](https://github.com/vijayrkn/pickwise/actions/workflows/ci.yml/badge.svg)](https://github.com/vijayrkn/pickwise/actions/workflows/ci.yml)
 [![Daily pick](https://github.com/vijayrkn/pickwise/actions/workflows/daily-pick.yml/badge.svg)](https://github.com/vijayrkn/pickwise/actions/workflows/daily-pick.yml)
 ![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white)
-![Claude](https://img.shields.io/badge/Claude-Opus%205.5-D97757)
+![Claude](https://img.shields.io/badge/Claude-Haiku%205.5-D97757)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 </div>
@@ -62,7 +62,7 @@ flowchart LR
 ```
 
 1. **Screen (code).** Pulls a year of prices for the universe in one batch call and computes 12-1 month momentum, 3-month return, trend (50/200-day averages), volatility, distance from the 52-week high, and RSI. The top 25 then get a quality score from fundamentals and are re-ranked to a 10-name shortlist. Anything picked in the last 30 days is excluded.
-2. **Research (agent).** Claude Opus 5.5 gets the shortlist and a toolset. It decides which names deserve a closer look, pulls price action and fundamentals, searches the web for recent earnings and catalysts, and checks its own track record before committing.
+2. **Research (agent).** Claude Haiku 5.5 gets the shortlist and a toolset. It decides which names deserve a closer look, pulls price action and fundamentals, searches the web for recent earnings and catalysts, and checks its own track record before committing.
 3. **Decide (structured output).** The agent must call `submit_pick` with a strict JSON schema (thesis, catalysts, risks, conviction, and why it beat the runner-up). Off-shortlist tickers are rejected, and the agent is told to try again.
 4. **Publish and track (code).** A GitHub Action runs every weekday before the US open. It writes `picks/YYYY-MM-DD.md`, appends to `picks/history.json`, refreshes this README, and commits.
 
@@ -74,7 +74,9 @@ flowchart LR
 | Strict tool schemas plus a terminal `submit_pick` tool | Output is guaranteed to parse. Validation errors go back to the model as `is_error` tool results so it can self-correct. |
 | Server-side web search | Fresh news without running a scraper. Results come with citations, which end up in `sources`. |
 | The agent sees its own track record | Discourages repetition and overconfidence. "Low conviction" is an allowed answer. |
-| `fallbacks: "default"` on every request | If the primary model declines, the API retries on a fallback model inside the same call, so the daily job doesn't fail silently. |
+| Claude Haiku 5.5 at `low` effort by default | A daily run costs a fraction of a cent. The quant screen already does the heavy lifting, so the model only has to weigh 2-3 finalists. Use `--model claude-opus-5-5 --effort high` for deeper research. |
+| Prompt caching and a tight research budget | Every turn resends the conversation, so the repeated prefix is cached (billed at 10% of the input rate). The agent is capped at 8 turns and 3 web searches. |
+| Refusal fallback on larger models | With Opus or Sonnet, `fallbacks: "default"` retries a declined request on a fallback model inside the same call. Haiku doesn't offer this, so a refusal ends the run with a clear error. |
 | `--no-llm` quant-only mode | The pipeline still runs (and CI can exercise it) without an API key. |
 
 ## Quick start
@@ -87,7 +89,8 @@ pip install -e ".[dev]"
 pickwise screen                 # today's quantitative shortlist
 pickwise run --no-llm --dry-run # quant-only pick, nothing written
 export ANTHROPIC_API_KEY=sk-ant-...
-pickwise -v run --dry-run       # full agent run, printed to the terminal
+pickwise -v run --dry-run       # full agent run (Haiku), printed to the terminal
+pickwise -v run --dry-run --model claude-opus-5-5 --effort high  # deeper, pricier run
 pickwise run                    # publish to picks/ and update README
 pickwise track                  # performance of every past pick
 ```

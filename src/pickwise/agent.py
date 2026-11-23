@@ -10,16 +10,20 @@ import anthropic
 import pandas as pd
 
 from .models import Pick
-from .tools import TOOL_DEFINITIONS, Toolbox
+from .tools import Toolbox, tool_definitions
 from .universe import sector_of
 
 log = logging.getLogger(__name__)
 
-MODEL = "claude-opus-5-5"
-MAX_TURNS = 20
+# Haiku keeps a daily run to a fraction of a cent. Pass --model claude-opus-5-5 for deeper
+# research at a higher price.
+MODEL = "claude-haiku-5-5"
+DEFAULT_EFFORT = "low"
+MAX_TURNS = 8
 # Server-side refusal fallback: if the primary model declines, the API retries on
-# Anthropic's recommended fallback model inside the same call.
+# Anthropic's recommended fallback model inside the same call. Not offered for Haiku.
 FALLBACK_BETA = "server-side-fallback-2026-07-01"
+_FALLBACK_PREFIXES = ("claude-opus-", "claude-sonnet-", "claude-fable-")
 
 SYSTEM_PROMPT = """\
 You are Pickwise, an equity research analyst who publishes exactly one US stock idea per \
@@ -29,11 +33,14 @@ A quantitative screen (momentum, trend, volatility and quality factors) has alre
 the universe to a shortlist. Your job is to do the judgment work the screen can't:
 
 1. Review the shortlist and check get_pick_history so you don't repeat yourself.
-2. Investigate the most promising three or four names with get_price_action and \
-get_fundamentals.
-3. Use web_search for recent news, earnings results and upcoming catalysts on your finalists. \
-Prefer primary or reputable financial sources from the last 30 days.
-4. Choose the single best risk/reward idea for a 1-3 month horizon and call submit_pick.
+2. Investigate your top two or three names with get_price_action and get_fundamentals. \
+Request several tools in one turn where you can.
+3. Run one or two web searches for recent news, earnings and upcoming catalysts on your \
+finalists. Your training data ends well before today's date, so earnings dates, guidance and \
+recent events may have changed: search for those rather than relying on memory. Prefer \
+reputable financial sources from the last 30 days.
+4. Choose the single best risk/reward idea for a 1-3 month horizon and call submit_pick. \
+Keep each field concise.
 
 Standards:
 - Ground every claim in the data you retrieved. `sources` holds only URLs from web search \
@@ -57,6 +64,7 @@ class AgentResult:
     turns: int
     input_tokens: int
     output_tokens: int
+    cached_input_tokens: int = 0
 
 
 def _shortlist_brief(candidates: pd.DataFrame, as_of: str) -> str:
@@ -94,28 +102,39 @@ def run_agent(
     as_of: str,
     client: anthropic.Anthropic | None = None,
     model: str = MODEL,
-    effort: str = "high",
+    effort: str = DEFAULT_EFFORT,
 ) -> AgentResult:
     client = client or anthropic.Anthropic()
     messages: list[dict] = [
         {"role": "user", "content": _shortlist_brief(toolbox.candidates, as_of)}
     ]
-    usage_in = usage_out = 0
+    usage_in = usage_out = cached = 0
     served_by = model
+    tools = tool_definitions(model)
+    extra = {}
+    if model.startswith(_FALLBACK_PREFIXES):
+        extra = {"betas": [FALLBACK_BETA], "fallbacks": "default"}
 
     for turn in range(1, MAX_TURNS + 1):  # noqa: B007 - `turn` is reported after the loop
         response = client.beta.messages.create(
             model=model,
             max_tokens=16000,
             system=SYSTEM_PROMPT,
-            tools=TOOL_DEFINITIONS,
+            tools=tools,
             messages=messages,
             thinking={"type": "adaptive"},
             output_config={"effort": effort},
-            betas=[FALLBACK_BETA],
-            fallbacks="default",
+            # Each turn resends the whole conversation; caching bills the repeated prefix
+            # (system prompt, tools, earlier turns) at a tenth of the input rate.
+            cache_control={"type": "ephemeral"},
+            **extra,
         )
-        usage_in += response.usage.input_tokens
+        usage_in += (
+            response.usage.input_tokens
+            + (response.usage.cache_read_input_tokens or 0)
+            + (response.usage.cache_creation_input_tokens or 0)
+        )
+        cached += response.usage.cache_read_input_tokens or 0
         usage_out += response.usage.output_tokens
         served_by = response.model
 
@@ -163,6 +182,7 @@ def run_agent(
         turns=turn,
         input_tokens=usage_in,
         output_tokens=usage_out,
+        cached_input_tokens=cached,
     )
 
 

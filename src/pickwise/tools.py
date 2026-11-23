@@ -15,7 +15,7 @@ import pandas as pd
 from .models import SUBMIT_PICK_SCHEMA, Pick, PickRecord
 from .universe import BENCHMARK, sector_of
 
-WEB_SEARCH_MAX_USES = 6
+WEB_SEARCH_MAX_USES = 3
 
 TOOL_DEFINITIONS = [
     {
@@ -65,12 +65,20 @@ TOOL_DEFINITIONS = [
         "strict": True,
         "input_schema": SUBMIT_PICK_SCHEMA,
     },
-    {
-        "type": "web_search_20260209",
-        "name": "web_search",
-        "max_uses": WEB_SEARCH_MAX_USES,
-    },
 ]
+
+# The dynamic-filtering search tool runs on the larger models; Haiku uses the basic version.
+_DYNAMIC_SEARCH_PREFIXES = ("claude-opus-", "claude-sonnet-", "claude-fable-")
+
+
+def tool_definitions(model: str) -> list[dict]:
+    """Custom tools plus the server-side web search variant this model supports."""
+    search_type = (
+        "web_search_20260209" if model.startswith(_DYNAMIC_SEARCH_PREFIXES)
+        else "web_search_20250305"
+    )
+    search = {"type": search_type, "name": "web_search", "max_uses": WEB_SEARCH_MAX_USES}
+    return [*TOOL_DEFINITIONS, search]
 
 
 def _round(value, ndigits: int = 4):
