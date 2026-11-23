@@ -1,10 +1,9 @@
-name: Scheduled pick
+name: Daily pick
 
 on:
   schedule:
-    # Mondays and Thursdays (every 3-4 days, always a trading day) at 13:00 UTC,
-    # i.e. 9:00 ET (EDT) / 8:00 ET (EST), before the US open.
-    - cron: "0 13 * * 1,4"
+    # 13:00 UTC on weekdays = 9:00 ET (EDT) / 8:00 ET (EST), before the US open.
+    - cron: "0 13 * * 1-5"
   workflow_dispatch:
     inputs:
       no_llm:
