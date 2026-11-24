@@ -18,11 +18,11 @@
 ## Today's pick
 
 <!-- today:start -->
-### 2026-11-23: [TXN](picks/2026-11-23.md) · Texas Instruments
+### 2026-11-24: [ABBV](picks/2026-11-24.md) · AbbVie Inc.
 
-> TXN: Analog chip leader with strong momentum, fresh Cantor upgrade, but priced for execution
+> AbbVie: a cheaper-than-peers health care compounder at a 52-week high
 
-Conviction: 🟠 Medium · Horizon: 1-3 months · [Full write-up →](picks/2026-11-23.md)
+Conviction: 🟠 Medium · Horizon: 1-3 months · [Full write-up →](picks/2026-11-24.md)
 <!-- today:end -->
 
 ## Track record
@@ -30,13 +30,14 @@ Conviction: 🟠 Medium · Horizon: 1-3 months · [Full write-up →](picks/2026
 Every pick is logged with its entry price and scored against the S&P 500 (SPY) over the same window. Nothing gets deleted, so the misses stay on the record too.
 
 <!-- track-record:start -->
-**2 picks** · Hit rate **0%** · Beat S&P 500 **0%** · Avg return **-7.16%** · Avg alpha **-1.58%**
+**3 picks** · Hit rate **0%** · Beat S&P 500 **33%** · Avg return **-8.03%** · Avg alpha **-3.84%**
 
 | Date | Ticker | Conviction | Entry | Now | Return | vs S&P 500 |
 |---|---|---|---|---|---|---|
-| 2026-11-23 | [TXN](picks/2026-11-23.md) | medium | $291.19 | $291.19 | +0.00% | +0.00% |
-| 2026-10-19 | [EOG](picks/2026-10-19.md) | low | $157.82 | $145.34 | -7.91% | -2.02% |
-| 2026-10-16 | [MSFT](picks/2026-10-16.md) | medium | $526.26 | $492.50 | -6.42% | -1.14% |
+| 2026-11-24 | [ABBV](picks/2026-11-24.md) | medium | $300.28 | $300.28 | -0.00% | -0.00% |
+| 2026-11-23 | [TXN](picks/2026-11-23.md) | medium | $291.19 | $258.44 | -11.25% | -10.76% |
+| 2026-10-19 | [EOG](picks/2026-10-19.md) | low | $157.82 | $146.59 | -7.12% | -0.77% |
+| 2026-10-16 | [MSFT](picks/2026-10-16.md) | medium | $526.26 | $496.13 | -5.73% | +0.01% |
 <!-- track-record:end -->
 
 Full history: [`picks/`](picks/)
