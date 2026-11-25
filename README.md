@@ -18,11 +18,11 @@
 ## Today's pick
 
 <!-- today:start -->
-### 2026-11-24: [ABBV](picks/2026-11-24.md) · AbbVie Inc.
+### 2026-11-25: [LLY](picks/2026-11-25.md) · Eli Lilly and Company
 
-> AbbVie: a cheaper-than-peers health care compounder at a 52-week high
+> Eli Lilly: fast growth at a forward multiple that is lower than its trailing one suggests
 
-Conviction: 🟠 Medium · Horizon: 1-3 months · [Full write-up →](picks/2026-11-24.md)
+Conviction: 🟠 Medium · Horizon: 1-3 months · [Full write-up →](picks/2026-11-25.md)
 <!-- today:end -->
 
 ## Track record
@@ -30,14 +30,15 @@ Conviction: 🟠 Medium · Horizon: 1-3 months · [Full write-up →](picks/2026
 Every pick is logged with its entry price and scored against the S&P 500 (SPY) over the same window. Nothing gets deleted, so the misses stay on the record too.
 
 <!-- track-record:start -->
-**3 picks** · Hit rate **0%** · Beat S&P 500 **33%** · Avg return **-8.03%** · Avg alpha **-3.84%**
+**4 picks** · Hit rate **0%** · Beat S&P 500 **25%** · Avg return **-5.52%** · Avg alpha **-2.10%**
 
 | Date | Ticker | Conviction | Entry | Now | Return | vs S&P 500 |
 |---|---|---|---|---|---|---|
-| 2026-11-24 | [ABBV](picks/2026-11-24.md) | medium | $300.28 | $300.28 | -0.00% | -0.00% |
-| 2026-11-23 | [TXN](picks/2026-11-23.md) | medium | $291.19 | $258.44 | -11.25% | -10.76% |
-| 2026-10-19 | [EOG](picks/2026-10-19.md) | low | $157.82 | $146.59 | -7.12% | -0.77% |
-| 2026-10-16 | [MSFT](picks/2026-10-16.md) | medium | $526.26 | $496.13 | -5.73% | +0.01% |
+| 2026-11-25 | [LLY](picks/2026-11-25.md) | medium | $1,392.22 | $1,392.22 | -0.00% | -0.00% |
+| 2026-11-24 | [ABBV](picks/2026-11-24.md) | medium | $300.28 | $294.48 | -1.93% | -1.64% |
+| 2026-11-23 | [TXN](picks/2026-11-23.md) | medium | $291.19 | $270.19 | -7.21% | -6.44% |
+| 2026-10-19 | [EOG](picks/2026-10-19.md) | low | $157.82 | $148.31 | -6.03% | +0.59% |
+| 2026-10-16 | [MSFT](picks/2026-10-16.md) | medium | $526.26 | $489.93 | -6.90% | -0.90% |
 <!-- track-record:end -->
 
 Full history: [`picks/`](picks/)

@@ -34,5 +34,14 @@
     "entry_price": 300.28,
     "benchmark_entry_price": 718.78,
     "model": "claude-haiku-5-5"
+  },
+  {
+    "date": "2026-11-25",
+    "ticker": "LLY",
+    "company": "Eli Lilly and Company",
+    "conviction": "medium",
+    "entry_price": 1392.22,
+    "benchmark_entry_price": 716.7,
+    "model": "claude-haiku-5-5"
   }
 ]
