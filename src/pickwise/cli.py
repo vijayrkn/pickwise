@@ -84,16 +84,24 @@ def cmd_run(args) -> int:
         benchmark_entry_price=round(float(closes[BENCHMARK].dropna().iloc[-1]), 4),
         model=result.model,
     ))
-    _refresh_readme(records, closes, pick, as_of_str)
+    _refresh_results(records, closes, pick, as_of_str)
     print(f"Published picks/{as_of_str}.md -> {pick.ticker}")
     return 0
 
 
-def _refresh_readme(records, closes, pick, as_of_str) -> None:
+def _refresh_results(records, closes, pick, as_of_str) -> None:
+    """Re-price every past pick at the latest close: README table and each pick file."""
+    tickers = {r.ticker for r in records} | {BENCHMARK}
+    missing = sorted(tickers - set(closes.columns))
+    if missing:  # past picks can drop out of today's screen; fetch them separately
+        closes = closes.join(market_data.download_closes(missing, period="5d"), how="outer")
     prices = {c: float(closes[c].dropna().iloc[-1]) for c in closes.columns}
+    price_date = closes[BENCHMARK].dropna().index[-1].date().isoformat()
     perf = tracker.performance(records, prices, BENCHMARK)
-    track_md = report.render_track_record(perf, tracker.summary(perf, as_of_str))
+    track_md = report.render_track_record(perf, tracker.summary(perf, as_of_str), price_date)
     report.update_readme(README, track_md, pick, as_of_str)
+    n = report.update_pick_files(PICKS_DIR, perf, price_date)
+    log.info("Re-priced %d past picks at the %s close", n, price_date)
 
 
 def cmd_track(args) -> int:
@@ -107,6 +115,8 @@ def cmd_track(args) -> int:
     perf = tracker.performance(records, prices, BENCHMARK)
     print(perf.round(4).to_string(index=False))
     print(tracker.summary(perf))
+    if args.write:
+        _refresh_results(records, closes, None, date.today().isoformat())
     return 0
 
 
@@ -127,7 +137,10 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("screen", help="Print today's quantitative shortlist.").set_defaults(
         func=cmd_screen
     )
-    sub.add_parser("track", help="Show performance of past picks.").set_defaults(func=cmd_track)
+    track = sub.add_parser("track", help="Show performance of past picks.")
+    track.add_argument("--write", action="store_true",
+                       help="Also re-price the README table and every pick file.")
+    track.set_defaults(func=cmd_track)
 
     args = parser.parse_args(argv)
     logging.basicConfig(

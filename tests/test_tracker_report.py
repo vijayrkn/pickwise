@@ -57,8 +57,8 @@ def test_same_day_picks_excluded_from_stats():
     perf = tracker.performance(records, {"OLD": 101, "NEW": 100.01, "SPY": 500}, "SPY")
     assert tracker.summary(perf, as_of="2026-10-16")["picks"] == 1
     assert tracker.summary(perf.iloc[:1], as_of="2026-10-16") == {"picks": 0}
-    md = report.render_track_record(perf, tracker.summary(perf, as_of="2026-10-16"))
-    assert "**1 pick**" in md
+    md = report.render_track_record(perf, tracker.summary(perf, as_of="2026-10-16"), "2026-10-16")
+    assert "**1 pick**" in md and "Price on 2026-10-16" in md
 
 
 def test_non_url_sources_are_not_rendered_as_links(toolbox):
@@ -69,3 +69,27 @@ def test_non_url_sources_are_not_rendered_as_links(toolbox):
     md = report.render_pick(pick, "2026-10-16", 1.0, toolbox.candidates, "m")
     assert "<get_fundamentals" not in md
     assert "Market and fundamental data only" in md
+
+
+def test_pick_files_are_repriced_including_old_ones(tmp_path, toolbox):
+    ticker = toolbox.candidates.index[0]
+    pick = Pick(ticker=ticker, company="Co", headline="h", conviction="low", horizon="1-3 months",
+                thesis=["t"], catalysts=["c"], risks=["r"], why_not_runner_up="w",
+                runner_up=toolbox.candidates.index[1])
+    new_file = report.render_pick(pick, "2026-10-02", 100.0, toolbox.candidates, "m")
+    (tmp_path / "2026-10-02.md").write_text(new_file)
+    # A file written before the performance section existed.
+    (tmp_path / "2026-10-01.md").write_text("# OLD\n\n| table |\n\n## Thesis\n- t\n")
+    records = [record("2026-10-01", "OLD", 100), record("2026-10-02", "NEW", 100)]
+    perf = tracker.performance(records, {"OLD": 110, "NEW": 100, "SPY": 505}, "SPY")
+
+    assert report.update_pick_files(tmp_path, perf, "2026-10-02") == 2
+    old = (tmp_path / "2026-10-01.md").read_text()
+    assert "Price on 2026-10-02" in old and "🟢 +10.00%" in old and "+1.00%" in old
+    assert old.index("Performance so far") < old.index("## Thesis")
+    assert "after the next trading day" in (tmp_path / "2026-10-02.md").read_text()
+    # Re-running with the same prices changes nothing; a new close re-prices.
+    assert report.update_pick_files(tmp_path, perf, "2026-10-02") == 0
+    perf2 = tracker.performance(records, {"OLD": 90, "NEW": 100, "SPY": 505}, "SPY")
+    report.update_pick_files(tmp_path, perf2, "2026-10-05")
+    assert "🔴 -10.00%" in (tmp_path / "2026-10-01.md").read_text()

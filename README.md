@@ -27,19 +27,19 @@ Conviction: 🟠 Medium · Horizon: 1-3 months · [Full write-up →](picks/2026
 
 ## Track record
 
-Every pick is logged with its entry price and scored against the S&P 500 (SPY) over the same window. Nothing gets deleted, so the misses stay on the record too.
+Every pick is logged with its entry price and scored against the S&P 500 (SPY) over the same window. Every run re-prices all past picks at the latest close, here and in each pick's own file. Nothing gets deleted, so the misses stay on the record too.
 
 <!-- track-record:start -->
 **5 picks** · Hit rate **0%** · Beat S&P 500 **20%** · Avg return **-4.41%** · Avg alpha **-1.68%**
 
-| Date | Ticker | Conviction | Entry | Now | Return | vs S&P 500 |
-|---|---|---|---|---|---|---|
-| 2026-11-26 | [V](picks/2026-11-26.md) | medium | $424.39 | $424.39 | +0.00% | +0.00% |
-| 2026-11-25 | [LLY](picks/2026-11-25.md) | medium | $1,392.22 | $1,392.22 | -0.00% | -0.00% |
-| 2026-11-24 | [ABBV](picks/2026-11-24.md) | medium | $300.28 | $294.48 | -1.93% | -1.64% |
-| 2026-11-23 | [TXN](picks/2026-11-23.md) | medium | $291.19 | $270.19 | -7.21% | -6.44% |
-| 2026-10-19 | [EOG](picks/2026-10-19.md) | low | $157.82 | $148.31 | -6.03% | +0.59% |
-| 2026-10-16 | [MSFT](picks/2026-10-16.md) | medium | $526.26 | $489.93 | -6.90% | -0.90% |
+| Picked | Ticker | Conviction | Entry price | Price on 2026-11-25 | Change since pick | S&P 500 same period | vs S&P 500 |
+|---|---|---|---|---|---|---|---|
+| 2026-11-26 | [V](picks/2026-11-26.md) | medium | $424.39 | $424.39 | 0.00% | +0.00% | 0.00% |
+| 2026-11-25 | [LLY](picks/2026-11-25.md) | medium | $1,392.22 | $1,392.22 | 0.00% | +0.00% | 0.00% |
+| 2026-11-24 | [ABBV](picks/2026-11-24.md) | medium | $300.28 | $294.48 | 🔴 -1.93% | -0.29% | 🔴 -1.64% |
+| 2026-11-23 | [TXN](picks/2026-11-23.md) | medium | $291.19 | $270.19 | 🔴 -7.21% | -0.77% | 🔴 -6.44% |
+| 2026-10-19 | [EOG](picks/2026-10-19.md) | low | $157.82 | $148.31 | 🔴 -6.03% | -6.62% | 🟢 +0.59% |
+| 2026-10-16 | [MSFT](picks/2026-10-16.md) | medium | $526.26 | $489.93 | 🔴 -6.90% | -6.01% | 🔴 -0.90% |
 <!-- track-record:end -->
 
 Full history: [`picks/`](picks/)
@@ -97,6 +97,7 @@ pickwise -v run --dry-run       # full agent run (Haiku), printed to the termina
 pickwise -v run --dry-run --model claude-opus-5-5 --effort high  # deeper, pricier run
 pickwise run                    # publish to picks/ and update README
 pickwise track                  # performance of every past pick
+pickwise track --write          # re-price the README table and pick files
 ```
 
 ### Run it on your own fork

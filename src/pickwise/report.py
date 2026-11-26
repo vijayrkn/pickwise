@@ -16,6 +16,10 @@ DISCLAIMER = (
     "circumstances. Do your own research."
 )
 CONVICTION_BADGE = {"low": "🟡 Low", "medium": "🟠 Medium", "high": "🟢 High"}
+PERFORMANCE_PLACEHOLDER = (
+    "## Performance so far\n\n<!-- performance:start -->\n"
+    "_Updated on every run._\n<!-- performance:end -->"
+)
 
 
 def _bullets(items: list[str]) -> str:
@@ -41,6 +45,8 @@ Horizon: {pick.horizon}
 | ${price:,.2f} | {row['return_3m']:+.1%} | {row['momentum_12_1']:+.1%} | \
 {row['pct_from_high']:+.1%} | {row['rsi_14']:.0f} | {row['score']:.2f} |
 
+{PERFORMANCE_PLACEHOLDER}
+
 ## Thesis
 {_bullets(pick.thesis)}
 
@@ -62,7 +68,9 @@ Horizon: {pick.horizon}
 """
 
 
-def render_track_record(perf: pd.DataFrame, stats: dict, limit: int = 10) -> str:
+def render_track_record(
+    perf: pd.DataFrame, stats: dict, price_date: str, limit: int = 10
+) -> str:
     if perf.empty:
         return "_Track record starts after the first pick._"
     if stats["picks"] == 0:
@@ -78,15 +86,58 @@ def render_track_record(perf: pd.DataFrame, stats: dict, limit: int = 10) -> str
     lines = [
         headline,
         "",
-        "| Date | Ticker | Conviction | Entry | Now | Return | vs S&P 500 |",
-        "|---|---|---|---|---|---|---|",
+        f"| Picked | Ticker | Conviction | Entry price | Price on {price_date} | Change since pick "
+        "| S&P 500 same period | vs S&P 500 |",
+        "|---|---|---|---|---|---|---|---|",
     ]
     for _, r in perf.head(limit).iterrows():
         lines.append(
             f"| {r['date']} | [{r['ticker']}](picks/{r['date']}.md) | {r['conviction']} | "
-            f"${r['entry']:,.2f} | ${r['current']:,.2f} | {r['return']:+.2%} | {r['alpha']:+.2%} |"
+            f"${r['entry']:,.2f} | ${r['current']:,.2f} | {_signed(r['return'])} | "
+            f"{r['benchmark_return']:+.2%} | {_signed(r['alpha'])} |"
         )
+    if len(perf) > limit:
+        lines += ["", f"_Showing the latest {limit}. Every pick file in `picks/` carries its own "
+                      "up-to-date performance._"]
     return "\n".join(lines)
+
+
+def _signed(x: float) -> str:
+    """Percentage with a colour cue: green up, red down, nothing for flat."""
+    pct = f"{x:+.2%}"
+    if pct in ("+0.00%", "-0.00%"):
+        return "0.00%"
+    return f"🟢 {pct}" if x > 0 else f"🔴 {pct}"
+
+
+def render_performance(row: pd.Series, price_date: str) -> str:
+    """The live 'Performance so far' block inside a pick file, rewritten on every run."""
+    if row["date"] >= price_date:
+        return (f"_Picked at the {price_date} close. Performance appears after the next "
+                "trading day._")
+    return (
+        "| Entry price | Price on {d} | Change since pick | S&P 500 same period | vs S&P 500 |\n"
+        "|---|---|---|---|---|\n"
+        "| ${e:,.2f} | ${c:,.2f} | {r} | {b:+.2%} | {a} |"
+    ).format(d=price_date, e=row["entry"], c=row["current"], r=_signed(row["return"]),
+             b=row["benchmark_return"], a=_signed(row["alpha"]))
+
+
+def update_pick_files(picks_dir: Path, perf: pd.DataFrame, price_date: str) -> int:
+    """Refresh the performance block in every pick file. Older files get the block inserted."""
+    updated = 0
+    for _, row in perf.iterrows():
+        path = picks_dir / f"{row['date']}.md"
+        if not path.exists():
+            continue
+        text = path.read_text()
+        if "<!-- performance:start -->" not in text:
+            text = text.replace("\n## Thesis", f"\n{PERFORMANCE_PLACEHOLDER}\n\n## Thesis", 1)
+        new = replace_section(text, "performance", render_performance(row, price_date))
+        if new != text:
+            path.write_text(new)
+            updated += 1
+    return updated
 
 
 def replace_section(text: str, name: str, body: str) -> str:
@@ -97,14 +148,17 @@ def replace_section(text: str, name: str, body: str) -> str:
     return pattern.sub(lambda m: m.group(1) + body + m.group(2), text)
 
 
-def update_readme(readme: Path, track_record_md: str, pick: Pick, as_of: str) -> None:
+def update_readme(
+    readme: Path, track_record_md: str, pick: Pick | None, as_of: str
+) -> None:
     text = readme.read_text()
-    teaser = (
+    teaser = pick and (
         f"### {as_of}: [{pick.ticker}](picks/{as_of}.md) · {pick.company}\n\n"
         f"> {pick.headline}\n\n"
         f"Conviction: {CONVICTION_BADGE[pick.conviction]} · Horizon: {pick.horizon} · "
         f"[Full write-up →](picks/{as_of}.md)"
     )
-    text = replace_section(text, "today", teaser)
+    if pick is not None:  # None = only re-price the track record
+        text = replace_section(text, "today", teaser)
     text = replace_section(text, "track-record", track_record_md)
     readme.write_text(text)
