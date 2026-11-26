@@ -18,11 +18,11 @@
 ## Today's pick
 
 <!-- today:start -->
-### 2026-11-25: [LLY](picks/2026-11-25.md) · Eli Lilly and Company
+### 2026-11-26: [V](picks/2026-11-26.md) · Visa Inc.
 
-> Eli Lilly: fast growth at a forward multiple that is lower than its trailing one suggests
+> Visa: steady double-digit growth at a less stretched multiple than the defensive crowd
 
-Conviction: 🟠 Medium · Horizon: 1-3 months · [Full write-up →](picks/2026-11-25.md)
+Conviction: 🟠 Medium · Horizon: 1-3 months · [Full write-up →](picks/2026-11-26.md)
 <!-- today:end -->
 
 ## Track record
@@ -30,10 +30,11 @@ Conviction: 🟠 Medium · Horizon: 1-3 months · [Full write-up →](picks/2026
 Every pick is logged with its entry price and scored against the S&P 500 (SPY) over the same window. Nothing gets deleted, so the misses stay on the record too.
 
 <!-- track-record:start -->
-**4 picks** · Hit rate **0%** · Beat S&P 500 **25%** · Avg return **-5.52%** · Avg alpha **-2.10%**
+**5 picks** · Hit rate **0%** · Beat S&P 500 **20%** · Avg return **-4.41%** · Avg alpha **-1.68%**
 
 | Date | Ticker | Conviction | Entry | Now | Return | vs S&P 500 |
 |---|---|---|---|---|---|---|
+| 2026-11-26 | [V](picks/2026-11-26.md) | medium | $424.39 | $424.39 | +0.00% | +0.00% |
 | 2026-11-25 | [LLY](picks/2026-11-25.md) | medium | $1,392.22 | $1,392.22 | -0.00% | -0.00% |
 | 2026-11-24 | [ABBV](picks/2026-11-24.md) | medium | $300.28 | $294.48 | -1.93% | -1.64% |
 | 2026-11-23 | [TXN](picks/2026-11-23.md) | medium | $291.19 | $270.19 | -7.21% | -6.44% |
