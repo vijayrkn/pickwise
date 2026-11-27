@@ -52,5 +52,14 @@
     "entry_price": 424.39,
     "benchmark_entry_price": 716.7,
     "model": "claude-haiku-5-5"
+  },
+  {
+    "date": "2026-11-27",
+    "ticker": "COP",
+    "company": "ConocoPhillips",
+    "conviction": "medium",
+    "entry_price": 136.8,
+    "benchmark_entry_price": 728.32,
+    "model": "claude-haiku-5-5"
   }
 ]

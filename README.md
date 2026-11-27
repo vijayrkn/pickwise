@@ -18,11 +18,11 @@
 ## Today's pick
 
 <!-- today:start -->
-### 2026-11-26: [V](picks/2026-11-26.md) · Visa Inc.
+### 2026-11-27: [COP](picks/2026-11-27.md) · ConocoPhillips
 
-> Visa: steady double-digit growth at a less stretched multiple than the defensive crowd
+> ConocoPhillips: cheap E&P with a raised dividend and buyback fuel, but oil-price exposed
 
-Conviction: 🟠 Medium · Horizon: 1-3 months · [Full write-up →](picks/2026-11-26.md)
+Conviction: 🟠 Medium · Horizon: 1-3 months · [Full write-up →](picks/2026-11-27.md)
 <!-- today:end -->
 
 ## Track record
@@ -30,16 +30,17 @@ Conviction: 🟠 Medium · Horizon: 1-3 months · [Full write-up →](picks/2026
 Every pick is logged with its entry price and scored against the S&P 500 (SPY) over the same window. Every run re-prices all past picks at the latest close, here and in each pick's own file. Nothing gets deleted, so the misses stay on the record too.
 
 <!-- track-record:start -->
-**5 picks** · Hit rate **0%** · Beat S&P 500 **20%** · Avg return **-4.41%** · Avg alpha **-1.68%**
+**6 picks** · Hit rate **33%** · Beat S&P 500 **0%** · Avg return **-2.82%** · Avg alpha **-2.12%**
 
-| Picked | Ticker | Conviction | Entry price | Price on 2026-11-25 | Change since pick | S&P 500 same period | vs S&P 500 |
+| Picked | Ticker | Conviction | Entry price | Price on 2026-11-27 | Change since pick | S&P 500 same period | vs S&P 500 |
 |---|---|---|---|---|---|---|---|
-| 2026-11-26 | [V](picks/2026-11-26.md) | medium | $424.39 | $424.39 | 0.00% | +0.00% | 0.00% |
-| 2026-11-25 | [LLY](picks/2026-11-25.md) | medium | $1,392.22 | $1,392.22 | 0.00% | +0.00% | 0.00% |
-| 2026-11-24 | [ABBV](picks/2026-11-24.md) | medium | $300.28 | $294.48 | 🔴 -1.93% | -0.29% | 🔴 -1.64% |
-| 2026-11-23 | [TXN](picks/2026-11-23.md) | medium | $291.19 | $270.19 | 🔴 -7.21% | -0.77% | 🔴 -6.44% |
-| 2026-10-19 | [EOG](picks/2026-10-19.md) | low | $157.82 | $148.31 | 🔴 -6.03% | -6.62% | 🟢 +0.59% |
-| 2026-10-16 | [MSFT](picks/2026-10-16.md) | medium | $526.26 | $489.93 | 🔴 -6.90% | -6.01% | 🔴 -0.90% |
+| 2026-11-27 | [COP](picks/2026-11-27.md) | medium | $136.80 | $136.80 | 0.00% | +0.00% | 0.00% |
+| 2026-11-26 | [V](picks/2026-11-26.md) | medium | $424.39 | $429.56 | 🟢 +1.22% | +1.62% | 🔴 -0.40% |
+| 2026-11-25 | [LLY](picks/2026-11-25.md) | medium | $1,392.22 | $1,392.38 | 🟢 +0.01% | +1.62% | 🔴 -1.61% |
+| 2026-11-24 | [ABBV](picks/2026-11-24.md) | medium | $300.28 | $291.88 | 🔴 -2.80% | +1.33% | 🔴 -4.12% |
+| 2026-11-23 | [TXN](picks/2026-11-23.md) | medium | $291.19 | $281.85 | 🔴 -3.21% | +0.83% | 🔴 -4.04% |
+| 2026-10-19 | [EOG](picks/2026-10-19.md) | low | $157.82 | $148.70 | 🔴 -5.78% | -5.10% | 🔴 -0.68% |
+| 2026-10-16 | [MSFT](picks/2026-10-16.md) | medium | $526.26 | $492.85 | 🔴 -6.35% | -4.48% | 🔴 -1.87% |
 <!-- track-record:end -->
 
 Full history: [`picks/`](picks/)
